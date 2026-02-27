@@ -9,7 +9,7 @@ my-project/
 
 =========================================================================================
 
-Dockerfile.php
+*Dockerfile.php
 FROM php:8.4-fpm-alpine
 
 # Install system dependencies
@@ -30,7 +30,7 @@ WORKDIR /var/www/html
 
 =========================================================================================
 
-docker-compose.yml
+*docker-compose.yml
 name: laravel-react-split
 
 services:
@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile.php
     container_name: laravel_api
     volumes:
-      - ./backend:/var/www/html
+      - ./laravel-app:/var/www/html
     networks:
       - app-network
 
@@ -51,7 +51,7 @@ services:
     container_name: react_frontend
     working_dir: /app
     volumes:
-      - ./frontend:/app
+      - ./react-app:/app
     ports:
       - "5173:5173"
     # Command installs and runs Vite with host access
@@ -66,7 +66,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./backend:/var/www/html
+      - ./laravel-app:/var/www/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - backend
@@ -94,6 +94,7 @@ volumes:
 
 =========================================================================================
 
+*nginx/default.conf
 server {
     listen 80;
     index index.php index.html;
@@ -122,7 +123,7 @@ docker compose exec backend chmod -R 777 storage bootstrap/cache
 
 =========================================================================================
 
-frontend/vite.config.js
+*frontend/vite.config.js
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -136,7 +137,7 @@ export default defineConfig({
 
 =========================================================================================
 
-.env
+*.env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_DATABASE=laravel_db
